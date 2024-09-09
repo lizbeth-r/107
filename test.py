@@ -34,6 +34,3 @@ def hello():
 
 hello()
 
-
-
-
