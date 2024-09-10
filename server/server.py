@@ -1,5 +1,6 @@
 from flask import Flask, request
 import json
+from config import db
 
 app = Flask(__name__)
 
@@ -19,6 +20,10 @@ def footer():
 
 products = []
 
+def fix_id(obj):
+    obj["_id"]=str(obj["_id"])
+    return obj
+
 @app.get("/api/products")
 def read_products():
     return json.dumps(products)
@@ -26,9 +31,10 @@ def read_products():
 @app.post("/api/products")
 def save_products():
     item = request.get_json()
-    products.append(item)
+    # products.append(item)
+    db.products.insert_one(item)
     print(item)
-    return json.dumps(item)
+    return json.dumps(fix_id(item))
 
 @app.put("/api/products/<int:index>")
 def update_products(index):
